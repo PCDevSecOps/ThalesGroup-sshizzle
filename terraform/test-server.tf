@@ -2,6 +2,9 @@
 resource "azurerm_resource_group" "rg-sshizzle-test-server" {
   name     = "rg-sshizzle-test-server"
   location = var.location
+  tags = {
+    yor_trace = "62c89d13-3fb6-442e-9857-386d4618be47"
+  }
 }
 
 // Create a virtual network the VM
@@ -10,6 +13,9 @@ resource "azurerm_virtual_network" "vnet-sshizzle" {
   address_space       = ["10.200.200.0/24"]
   location            = azurerm_resource_group.rg-sshizzle-test-server.location
   resource_group_name = azurerm_resource_group.rg-sshizzle-test-server.name
+  tags = {
+    yor_trace = "9e37a8f0-f288-4042-a408-7c5b1b21a25e"
+  }
 }
 
 // Create a subnet for the VM
@@ -34,6 +40,9 @@ resource "azurerm_public_ip" "pip-sshizzle-test-server" {
   location            = azurerm_resource_group.rg-sshizzle-test-server.location
   resource_group_name = azurerm_resource_group.rg-sshizzle-test-server.name
   allocation_method   = "Static"
+  tags = {
+    yor_trace = "993d6160-5e0e-42dc-bcc0-cdb8a5e36e27"
+  }
 }
 
 // Create the  VM NIC and associate with the Public IP
@@ -47,6 +56,9 @@ resource "azurerm_network_interface" "nic-sshizzle-test-server" {
     subnet_id                     = azurerm_subnet.snet-sshizzle.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.pip-sshizzle-test-server.id
+  }
+  tags = {
+    yor_trace = "ba739baf-b961-4c2b-b378-6fc689a4b96d"
   }
 }
 
@@ -67,6 +79,9 @@ resource "azurerm_network_security_group" "nsg-sshizzle" {
     destination_port_range     = "22"
     source_address_prefix      = chomp(data.http.client_ip.body)
     destination_address_prefix = "*"
+  }
+  tags = {
+    yor_trace = "978f6533-5234-424d-9048-fec0be32fc58"
   }
 }
 
@@ -138,6 +153,9 @@ resource "azurerm_virtual_machine" "vm-sshizzle-test-server" {
   }
   os_profile_linux_config {
     disable_password_authentication = false
+  }
+  tags = {
+    yor_trace = "fd276e51-210b-4dda-b622-78432ff531f5"
   }
 }
 

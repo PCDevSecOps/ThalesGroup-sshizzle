@@ -7,6 +7,9 @@ locals {
 resource "azurerm_resource_group" "rg-sshizzle" {
   name     = "rg-sshizzle"
   location = var.location
+  tags = {
+    yor_trace = "70a751da-2ae7-4521-8fb4-f11a9f7b54ec"
+  }
 }
 
 // Create the Key Vault
@@ -43,6 +46,9 @@ resource "azurerm_key_vault" "kv-sshizzle" {
     object_id       = data.azurerm_client_config.current.object_id
     key_permissions = ["get", "list", "update", "create", "import", "delete", "recover", "backup", "restore"]
   }
+  tags = {
+    yor_trace = "758b2a83-56ed-4e70-8bbf-d0e9257b2c33"
+  }
 }
 
 // Create the CA key - an Azure generated RSA key
@@ -52,6 +58,9 @@ resource "azurerm_key_vault_key" "key-sshizzle" {
   key_type     = "RSA"
   key_size     = "${var.ca_key_size}"
   key_opts     = ["sign", "verify"]
+  tags = {
+    yor_trace = "25bfbbc1-5793-4bcc-a9f6-05d9bccdbe9a"
+  }
 }
 
 // Create a storage account to back the App Service Plan
@@ -61,6 +70,9 @@ resource "azurerm_storage_account" "sasshizzle" {
   location                 = azurerm_resource_group.rg-sshizzle.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  tags = {
+    yor_trace = "7603de32-9569-4e71-9a27-58a0f2bc5f50"
+  }
 }
 
 // Create an App Service plan to enable billing for the Azure Function
@@ -73,6 +85,9 @@ resource "azurerm_app_service_plan" "plan-sshizzle" {
   sku {
     tier = "Dynamic"
     size = "Y1"
+  }
+  tags = {
+    yor_trace = "730e10cf-91bd-4b78-98cc-5dbabea1534a"
   }
 }
 
@@ -174,6 +189,9 @@ resource "azurerm_function_app" "func-sshizzle" {
 
   identity {
     type = "SystemAssigned"
+  }
+  tags = {
+    yor_trace = "75d2c562-89ae-46f6-add0-e6f9680be302"
   }
 }
 
